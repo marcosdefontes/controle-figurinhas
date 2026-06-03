@@ -1,0 +1,856 @@
+[
+  {
+    "cod": "MEX",
+    "name": "México",
+    "missing": [
+      1,
+      2,
+      3,
+      8,
+      11,
+      12,
+      16,
+      19,
+      20
+    ],
+    "color": "#A9DFBF",
+    "group": "A"
+  },
+  {
+    "cod": "RSA",
+    "name": "África do Sul",
+    "missing": [
+      1,
+      11,
+      14,
+      18
+    ],
+    "color": "#FCF3CF",
+    "group": "A"
+  },
+  {
+    "cod": "KOR",
+    "name": "Coréia do Sul",
+    "missing": [
+      1,
+      3,
+      7,
+      10,
+      11,
+      15,
+      16,
+      19
+    ],
+    "color": "#D6EAF8",
+    "group": "A"
+  },
+  {
+    "cod": "CZE",
+    "name": "Rep. Tcheca",
+    "missing": [
+      2,
+      4,
+      6,
+      7,
+      8,
+      10,
+      11,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      20
+    ],
+    "color": "#E5E7E9",
+    "group": "A"
+  },
+  {
+    "cod": "CAN",
+    "name": "Canadá",
+    "missing": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      8,
+      9,
+      10,
+      12,
+      13,
+      15,
+      16,
+      19
+    ],
+    "color": "#FADBD8",
+    "group": "B"
+  },
+  {
+    "cod": "BIH",
+    "name": "Bósnia",
+    "missing": [
+      1,
+      3,
+      5,
+      7,
+      8,
+      9,
+      10,
+      11,
+      13,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "color": "#D6EAF8",
+    "group": "B"
+  },
+  {
+    "cod": "QAT",
+    "name": "Catar",
+    "missing": [
+      1,
+      2,
+      4,
+      6,
+      12,
+      13,
+      14
+    ],
+    "color": "#D98880",
+    "group": "B"
+  },
+  {
+    "cod": "BIH",
+    "name": "Suíça",
+    "missing": [
+      2,
+      3,
+      6,
+      9,
+      10,
+      11,
+      13,
+      14,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "color": "#FADBD8",
+    "group": "B"
+  },
+  {
+    "cod": "BRA",
+    "name": "Brasil",
+    "missing": [
+      10,
+      11,
+      15,
+      16,
+      17,
+      19
+    ],
+    "color": "#7DCEA0",
+    "group": "C"
+  },
+  {
+    "cod": "MAR",
+    "name": "Marrocos",
+    "missing": [
+      8,
+      18,
+      19
+    ],
+    "color": "#FADBD8",
+    "group": "C"
+  },
+  {
+    "cod": "HAI",
+    "name": "Haiti",
+    "missing": [
+      1,
+      2,
+      5,
+      9,
+      10,
+      13,
+      14,
+      16,
+      18
+    ],
+    "color": "#E8DAEF",
+    "group": "C"
+  },
+  {
+    "cod": "SCO",
+    "name": "Escócia",
+    "missing": [
+      4,
+      6,
+      7,
+      12,
+      13,
+      16,
+      20
+    ],
+    "color": "#5DADE2",
+    "group": "C"
+  },
+  {
+    "cod": "USA",
+    "name": "Estados Unidos",
+    "missing": [
+      3,
+      4,
+      5,
+      8,
+      11,
+      13,
+      14,
+      16,
+      19,
+      20
+    ],
+    "color": "#5DADE2",
+    "group": "D"
+  },
+  {
+    "cod": "PAR",
+    "name": "Paraguai",
+    "missing": [
+      4,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      18,
+      19
+    ],
+    "color": "#FADBD8",
+    "group": "D"
+  },
+  {
+    "cod": "AUS",
+    "name": "Austrália",
+    "missing": [
+      11,
+      16,
+      18,
+      20
+    ],
+    "color": "#5DADE2",
+    "group": "D"
+  },
+  {
+    "cod": "TUR",
+    "name": "Turquia",
+    "missing": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      17,
+      18,
+      19,
+      20
+    ],
+    "color": "#F5CBA7",
+    "group": "D"
+  },
+  {
+    "cod": "GER",
+    "name": "Alemanha",
+    "missing": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      8,
+      10,
+      11,
+      12,
+      14,
+      15,
+      16,
+      19
+    ],
+    "color": "#FAD7A0",
+    "group": "E"
+  },
+  {
+    "cod": "CUW",
+    "name": "Curaçao",
+    "missing": [
+      3,
+      4,
+      7,
+      8,
+      10,
+      13,
+      14,
+      15,
+      16,
+      17,
+      19,
+      20
+    ],
+    "color": "#D6EAF8",
+    "group": "E"
+  },
+  {
+    "cod": "CIV",
+    "name": "Costa do Marfim",
+    "missing": [
+      4,
+      5,
+      11,
+      12,
+      16,
+      18,
+      20
+    ],
+    "color": "#E8F8F5",
+    "group": "E"
+  },
+  {
+    "cod": "ECU",
+    "name": "Equador",
+    "missing": [
+      4,
+      5,
+      12,
+      13,
+      17,
+      18,
+      20
+    ],
+    "color": "#F9E79F",
+    "group": "E"
+  },
+  {
+    "cod": "NED",
+    "name": "Holanda",
+    "missing": [
+      4,
+      5,
+      9,
+      14,
+      17,
+      18
+    ],
+    "color": "#F5CBA7",
+    "group": "F"
+  },
+  {
+    "cod": "JPN",
+    "name": "Japão",
+    "missing": [
+      1,
+      2,
+      4,
+      5,
+      7,
+      9,
+      13,
+      14,
+      16,
+      18,
+      20
+    ],
+    "color": "#FADBD8",
+    "group": "F"
+  },
+  {
+    "cod": "SWE",
+    "name": "Suécia",
+    "missing": [
+      1,
+      3,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      14,
+      15,
+      16,
+      17
+    ],
+    "color": "#D6EAF8",
+    "group": "F"
+  },
+  {
+    "cod": "TUN",
+    "name": "Tunísia",
+    "missing": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      8,
+      9,
+      10,
+      14,
+      16,
+      17,
+      19,
+      20
+    ],
+    "color": "#FADBD8",
+    "group": "F"
+  },
+  {
+    "cod": "BEL",
+    "name": "Bélgica",
+    "missing": [
+      11,
+      16,
+      18
+    ],
+    "color": "#D98880",
+    "group": "G"
+  },
+  {
+    "cod": "EGY",
+    "name": "Egito",
+    "missing": [
+      1,
+      2,
+      6,
+      7,
+      9,
+      10,
+      11,
+      13,
+      14,
+      15,
+      17,
+      18
+    ],
+    "color": "#D98880",
+    "group": "G"
+  },
+  {
+    "cod": "IRN",
+    "name": "Irá",
+    "missing": [
+      4,
+      8,
+      14,
+      18
+    ],
+    "color": "#A9DFBF",
+    "group": "G"
+  },
+  {
+    "cod": "NZL",
+    "name": "Nova Zelândia",
+    "missing": [
+      3,
+      5,
+      8,
+      9,
+      10,
+      11,
+      13,
+      14,
+      16,
+      18,
+      19,
+      20
+    ],
+    "color": "#85C1E9",
+    "group": "G"
+  },
+  {
+    "cod": "ESP",
+    "name": "Espanha",
+    "missing": [
+      2,
+      3,
+      6,
+      12,
+      16,
+      20
+    ],
+    "color": "#D98880",
+    "group": "H"
+  },
+  {
+    "cod": "CPV",
+    "name": "Cabo Verde",
+    "missing": [
+      3,
+      7,
+      9,
+      11,
+      13,
+      14,
+      16,
+      17,
+      18,
+      20
+    ],
+    "color": "#85C1E9",
+    "group": "H"
+  },
+  {
+    "cod": "KSA",
+    "name": "Arábia Saudita",
+    "missing": [
+      2,
+      4,
+      5,
+      8,
+      10,
+      12,
+      16,
+      17,
+      20
+    ],
+    "color": "#A9DFBF",
+    "group": "H"
+  },
+  {
+    "cod": "URU",
+    "name": "Uruguai",
+    "missing": [
+      1,
+      2,
+      3,
+      4,
+      6,
+      7,
+      11,
+      13,
+      16,
+      18,
+      19
+    ],
+    "color": "#85C1E9",
+    "group": "H"
+  },
+  {
+    "cod": "FRA",
+    "name": "França",
+    "missing": [
+      1,
+      2,
+      4,
+      5,
+      6,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      17,
+      18,
+      19
+    ],
+    "color": "#2E86C1",
+    "group": "I"
+  },
+  {
+    "cod": "SEN",
+    "name": "Senegal",
+    "missing": [
+      1,
+      3,
+      6,
+      10,
+      11,
+      16,
+      18,
+      20
+    ],
+    "color": "#FCF3CF",
+    "group": "I"
+  },
+  {
+    "cod": "IRQ",
+    "name": "Iraque",
+    "missing": [
+      2,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      20
+    ],
+    "color": "#D98880",
+    "group": "I"
+  },
+  {
+    "cod": "NOR",
+    "name": "Noruega",
+    "missing": [
+      5,
+      8,
+      14,
+      18,
+      19,
+      20
+    ],
+    "color": "#85C1E9",
+    "group": "I"
+  },
+  {
+    "cod": "ARG",
+    "name": "Argentina",
+    "missing": [
+      2,
+      13
+    ],
+    "color": "#EBF5FB",
+    "group": "J"
+  },
+  {
+    "cod": "ALG",
+    "name": "Argélia",
+    "missing": [
+      2,
+      4,
+      6,
+      10,
+      12,
+      15,
+      19
+    ],
+    "color": "#D4EFDF",
+    "group": "J"
+  },
+  {
+    "cod": "AUT",
+    "name": "Áustria",
+    "missing": [
+      3,
+      6,
+      7,
+      8,
+      16,
+      17
+    ],
+    "color": "#FADBD8",
+    "group": "J"
+  },
+  {
+    "cod": "JOR",
+    "name": "Jordânia",
+    "missing": [
+      2,
+      3,
+      4,
+      6,
+      12,
+      13,
+      15,
+      17,
+      20
+    ],
+    "color": "#A9DFBF",
+    "group": "J"
+  },
+  {
+    "cod": "POR",
+    "name": "Portugal",
+    "missing": [
+      3,
+      4,
+      7,
+      10,
+      12,
+      13,
+      14,
+      15,
+      17,
+      19
+    ],
+    "color": "#7DCEA0",
+    "group": "K"
+  },
+  {
+    "cod": "COD",
+    "name": "Congo",
+    "missing": [
+      1,
+      3,
+      4,
+      5,
+      8,
+      9,
+      10,
+      12,
+      13,
+      14,
+      15,
+      17,
+      18,
+      19
+    ],
+    "color": "#85C1E9",
+    "group": "K"
+  },
+  {
+    "cod": "UZB",
+    "name": "Uzbequistão",
+    "missing": [
+      1,
+      2,
+      3,
+      9,
+      13,
+      15,
+      16,
+      18
+    ],
+    "color": "#D6EAF8",
+    "group": "K"
+  },
+  {
+    "cod": "COL",
+    "name": "Colômbia",
+    "missing": [
+      3,
+      6,
+      7,
+      10,
+      14,
+      16,
+      19
+    ],
+    "color": "#F5B041",
+    "group": "K"
+  },
+  {
+    "cod": "ENG",
+    "name": "Inglaterra",
+    "missing": [
+      1,
+      3,
+      6,
+      12,
+      14,
+      18
+    ],
+    "color": "#FADBD8",
+    "group": "L"
+  },
+  {
+    "cod": "CRO",
+    "name": "Croácia",
+    "missing": [
+      3,
+      8,
+      11,
+      12,
+      13,
+      16
+    ],
+    "color": "#D98880",
+    "group": "L"
+  },
+  {
+    "cod": "GHA",
+    "name": "Gana",
+    "missing": [
+      1,
+      4,
+      8,
+      12,
+      13,
+      17,
+      18
+    ],
+    "color": "#F9E79F",
+    "group": "L"
+  },
+  {
+    "cod": "PAN",
+    "name": "Panamá",
+    "missing": [
+      6,
+      7,
+      13,
+      19
+    ],
+    "color": "#FADBD8",
+    "group": "L"
+  },
+  {
+    "cod": "FWC",
+    "name": "FIFA CUP History",
+    "missing": [
+      4,
+      5,
+      6,
+      8,
+      9,
+      11,
+      14,
+      17,
+      18
+    ],
+    "color": "#1A5276",
+    "group": "FWC"
+  },
+  {
+    "cod": "CC",
+    "name": "Coca-Cola",
+    "missing": [
+      1,
+      2,
+      3,
+      5,
+      6,
+      8,
+      9,
+      10,
+      12,
+      13
+    ],
+    "color": "#EF5350",
+    "group": "CC"
+  }
+]

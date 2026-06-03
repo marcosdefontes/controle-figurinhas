@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Figurinhas Restantes • Álbum Pop</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap');
+
+    /* ==========================================
+       DESIGN SYSTEM TOKENS
+       ========================================== */
+    :root {
+      --bg-color: #FFFDF5;
+      /* Warm Cream Paper */
+      --fg-color: #1E293B;
+      /* Slate 800 */
+      --card-bg: #FFFFFF;
+      --accent-color: #8B5CF6;
+      /* Violet */
+      --secondary-color: #F472B6;
+      /* Pink */
+      --tertiary-color: #FBBF24;
+      /* Amber Yellow */
+      --quaternary-color: #34D399;
+      /* Mint Green */
+      --border-color: #1E293B;
+      --grid-dot-color: rgba(100, 116, 139, 0.12);
+
+      --ease-elastic: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--fg-color);
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      min-height: 100vh;
+      padding: 48px 24px;
+      /* Dot grid background texture */
+      background-image: radial-gradient(var(--grid-dot-color) 2px, transparent 2px);
+      background-size: 24px 24px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ==========================================
+       HEADER & TITLE STYLES
+       ========================================== */
+    header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 56px;
+      position: relative;
+    }
+
+    .title-banner {
+      display: inline-block;
+      background-color: var(--tertiary-color);
+      color: var(--fg-color);
+      font-family: 'Outfit', sans-serif;
+      font-size: 44px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: -1px;
+      padding: 16px 40px;
+      border: 3px solid var(--border-color);
+      border-radius: 20px;
+      box-shadow: 6px 6px 0px 0px var(--border-color);
+      transform: rotate(-1deg);
+      transition: transform 0.3s var(--ease-elastic);
+    }
+
+    .title-banner:hover {
+      transform: rotate(1deg) scale(1.02);
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: #64748B;
+      margin-top: 18px;
+      font-weight: 500;
+    }
+
+    /* ==========================================
+       GROUPS GRID & CARDS
+       ========================================== */
+    .groups-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 32px;
+    }
+
+    .group-card {
+      background-color: var(--card-bg);
+      border: 3px solid var(--border-color);
+      border-radius: 24px;
+      padding: 32px 24px 24px;
+      box-shadow: 8px 8px 0px 0px var(--border-color);
+      position: relative;
+      transition: all 0.3s var(--ease-elastic);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+
+
+    /* Floating circle badge header */
+    .group-badge {
+      position: absolute;
+      top: -20px;
+      left: 24px;
+      width: 44px;
+      height: 44px;
+      background-color: var(--accent-color);
+      color: white;
+      border: 3px solid var(--border-color);
+      border-radius: 50%;
+      font-family: 'Outfit', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 3px 3px 0px 0px var(--border-color);
+    }
+
+    .group-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      text-transform: uppercase;
+      border-bottom: 2px dashed #E2E8F0;
+      padding-bottom: 12px;
+      margin-top: 4px;
+    }
+
+    .selection-list {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 24px 32px;
+    }
+
+    .selection-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1 1 240px;
+      /* Grow and shrink with 240px base width */
+      min-width: 240px;
+    }
+
+    .selection-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .color-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid var(--border-color);
+      box-shadow: 1px 1px 0px 0px var(--border-color);
+    }
+
+    .selection-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+    }
+
+    .group-indicator {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 22px;
+      height: 22px;
+      padding: 0 4px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 12px;
+      color: #FFFFFF;
+      background-color: var(--accent-color); /* Premium Violet Badge */
+      border: 2px solid var(--border-color);
+      border-radius: 6px;
+      box-shadow: 2px 2px 0px 0px var(--border-color);
+      text-transform: uppercase;
+      margin-right: 8px;
+    }
+
+    /* ==========================================
+       MINI-STICKERS FRAME LIST
+       ========================================== */
+    .stickers-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .sticker-pill {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 68px;
+      aspect-ratio: 5 / 6.5;
+      /* Portrait perspective 5:6.5 */
+      background-color: var(--bg-color);
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--fg-color);
+      box-shadow: 2px 2px 0px 0px var(--border-color);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s var(--ease-elastic);
+      padding: 4px;
+    }
+
+    .sticker-pill.landscape {
+      aspect-ratio: 6.5 / 5;
+      /* Landscape perspective 6.5:5 for sticker #13 */
+      flex-direction: row;
+      gap: 3px;
+    }
+
+    .sticker-pill.special-shiny {
+      border: 2px dashed var(--accent-color);
+      /* Violet dashed special border */
+      box-shadow: 3px 3px 0px 0px var(--secondary-color), 3px 3px 0px 1px var(--border-color);
+      /* Duo offset pop shadow: Pink + Black outline */
+      z-index: 2;
+    }
+
+    .sticker-pill-code {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 10px;
+      opacity: 0.75;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .sticker-pill-num {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    .sticker-pill.landscape .sticker-pill-code {
+      font-size: 12px;
+    }
+
+    .sticker-pill.landscape .sticker-pill-num {
+      font-size: 15px;
+    }
+
+    /* Fallback / Error Alert Cards */
+    .alert-card {
+      background-color: #FEE2E2;
+      border: 3px solid #EF4444;
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      max-width: 600px;
+      margin: 40px auto;
+      box-shadow: 6px 6px 0px 0px #EF4444;
+    }
+
+    .alert-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      color: #991B1B;
+      font-size: 20px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .alert-text {
+      font-size: 14px;
+      color: #7F1D1D;
+      line-height: 1.6;
+    }
+
+    /* ==========================================
+       NEW DYNAMIC COUNTERS STYLES
+       ========================================== */
+    .global-counter {
+      display: inline-block;
+      margin-top: 0;
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 8px 24px;
+      background-color: var(--secondary-color);
+      /* Hot Pink */
+      color: var(--fg-color);
+      border: 2px solid var(--border-color);
+      border-radius: 9999px;
+      box-shadow: 3px 3px 0px 0px var(--border-color);
+      letter-spacing: 0.5px;
+      transition: transform 0.2s var(--ease-elastic);
+    }
+
+    .global-counter:hover {
+      transform: scale(1.03) rotate(1deg);
+    }
+
+    .selection-count-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--bg-color);
+      color: var(--fg-color);
+      border: 2px solid var(--border-color);
+      border-radius: 9999px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 2px 8px;
+      margin-left: auto;
+      /* Pushes to the far right */
+      box-shadow: 1px 1px 0px 0px var(--border-color);
+    }
+
+    /* ==========================================
+       PRINT INSTRUCTION HELPER BANNER (SCREEN ONLY)
+       ========================================== */
+    .print-instruction {
+      background-color: #EFF6FF;
+      color: #1E40AF;
+      border: 3px solid #1E293B;
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin: -24px auto 36px auto;
+      max-width: 700px;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.6;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 4px 4px 0px 0px #1E293B;
+      text-align: left;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .print-instruction strong {
+      font-weight: 700;
+    }
+
+    .print-icon {
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    /* ==========================================
+       REDUCED MOTION FOR ACCESSIBILITY
+       ========================================== */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-delay: 0s !important;
+        animation-duration: 0s !important;
+        transition-duration: 0s !important;
+        transform: none !important;
+      }
+
+      .title-banner:hover,
+      .group-card:hover,
+      .sticker-pill:hover {
+        transform: none !important;
+      }
+    }
+
+    /* ==========================================
+       PRINT SETUP FOR A4 PORTRAIT PAGE
+       ========================================== */
+    @media print {
+      * {
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      @page {
+        size: A4 portrait;
+        margin: 5mm 6mm;
+      }
+
+      body {
+        background-color: #FFFFFF !important;
+        background-image: none !important;
+        color: var(--fg-color) !important;
+        padding: 0 !important;
+      }
+
+      .container {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      header {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 12px !important;
+        margin-bottom: 12px !important;
+      }
+
+      .title-banner {
+        font-size: 20px !important;
+        padding: 6px 16px !important;
+        border: 2px solid #1E293B !important;
+        box-shadow: none !important;
+        background-color: var(--tertiary-color) !important;
+        border-radius: 8px !important;
+        transform: none !important;
+      }
+
+      .global-counter {
+        font-size: 11px !important;
+        padding: 3px 12px !important;
+        margin-top: 0 !important;
+        border: 1.5px solid #1E293B !important;
+        box-shadow: none !important;
+        background-color: var(--secondary-color) !important;
+      }
+
+      .groups-grid {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        justify-content: flex-start !important;
+      }
+
+      .group-card {
+        flex: 1 1 auto !important; /* Grow and shrink to fill rows dynamically */
+        min-width: calc(20% - 10px) !important; /* At most 5 cards per row */
+        max-width: calc(50% - 6px) !important;  /* At least 2 cards per row */
+        padding: 10px 8px 8px !important;
+        border: 1.5px solid #1E293B !important;
+        border-radius: 8px !important;
+        box-shadow: 2px 2px 0px #1E293B !important;
+        gap: 6px !important;
+        min-height: 0 !important;
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+      }
+
+      .group-badge {
+        width: 18px !important;
+        height: 18px !important;
+        font-size: 9px !important;
+        top: -9px !important;
+        left: 8px !important;
+        background-color: var(--accent-color) !important;
+        color: white !important;
+        border: 1.5px solid #1E293B !important;
+        box-shadow: 1px 1px 0px #1E293B !important;
+      }
+
+      .group-title {
+        font-size: 11.5px !important;
+        padding-bottom: 4px !important;
+        margin-top: 0 !important;
+        border-bottom-width: 1px !important;
+      }
+
+      .selection-list {
+        gap: 8px 10px !important;
+      }
+
+      .selection-row {
+        flex: 1 1 100px !important;
+        min-width: 100px !important;
+        gap: 4px !important;
+      }
+
+      .selection-header {
+        gap: 3px !important;
+      }
+
+      .color-dot {
+        width: 8px !important;
+        height: 8px !important;
+        border-width: 1.2px !important;
+        box-shadow: none !important;
+      }
+
+      .selection-name {
+        font-size: 9.5px !important;
+        letter-spacing: 0px !important;
+      }
+
+      .group-indicator {
+        min-width: 15px !important;
+        height: 15px !important;
+        font-size: 8px !important;
+        border-width: 1px !important;
+        border-radius: 4px !important;
+        box-shadow: 1px 1px 0px #1E293B !important;
+        margin-right: 4px !important;
+        padding: 0 !important;
+        color: #FFFFFF !important;
+        background-color: var(--accent-color) !important;
+      }
+
+      .selection-count-badge {
+        font-size: 8px !important;
+        padding: 0px 4px !important;
+        border-width: 1px !important;
+        box-shadow: none !important;
+      }
+
+      .stickers-wrap {
+        gap: 3px !important;
+      }
+
+      .sticker-pill {
+        height: 28px !important; /* Compact but highly readable height to squeeze onto 2 A4 pages */
+        border: 1px solid #1E293B !important;
+        border-radius: 4px !important;
+        box-shadow: 1px 1px 0px #1E293B !important;
+        padding: 1.5px !important;
+      }
+
+      .sticker-pill-code {
+        font-size: 5.5px !important;
+        font-weight: 800 !important;
+      }
+
+      .sticker-pill-num {
+        font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+        font-size: 11.5px !important;
+        font-weight: 700 !important;
+      }
+
+      .sticker-pill.landscape {
+        gap: 1.5px !important;
+      }
+
+      .sticker-pill.special-shiny {
+        border: 1.2px dashed var(--accent-color) !important;
+        box-shadow: 1px 1px 0px var(--secondary-color), 1.5px 1.5px 0px #1E293B !important;
+      }
+
+      .alert-card {
+        display: none !important;
+      }
+
+      .print-instruction {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- Header Banner -->
+    <header>
+      <h1 class="title-banner">Figurinhas Restantes</h1>
+      <div class="global-counter" id="global-counter-badge">Carregando totalizador...</div>
+    </header>
+
+
+
+    <!-- Error/Fallback Warning wrapper -->
+    <div id="fallback-container"></div>
+
+    <!-- Active dynamic grid of Group Cards -->
+    <div class="groups-grid" id="groups-container">
+      <!-- Injected Dynamically by JavaScript -->
+    </div>
+
+  </div>
+
+  <!-- ==========================================
+       DYNAMIC RUNTIME CONTROLLER
+       ========================================== -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const groupsContainer = document.getElementById("groups-container");
+      const fallbackContainer = document.getElementById("fallback-container");
+
+      // Professional HSL color desaturation and tinting algorithm
+      function getLightColorVariant(hex) {
+        if (!hex) return 'rgba(100, 116, 139, 0.1)';
+        if (hex.startsWith('var')) return hex;
+
+        // Parse hex to RGB
+        let r = parseInt(hex.slice(1, 3), 16);
+        let g = parseInt(hex.slice(3, 5), 16);
+        let b = parseInt(hex.slice(5, 7), 16);
+
+        // Convert RGB to HSL
+        r /= 255; g /= 255; b /= 255;
+        let max = Math.max(r, g, b), min = Math.min(r, g, b);
+        let h, s, l = (max + min) / 2;
+
+        if (max === min) {
+          h = s = 0; // achromatic
+        } else {
+          let d = max - min;
+          s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+          switch (max) {
+            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+            case g: h = (b - r) / d + 2; break;
+            case b: h = (r - g) / d + 4; break;
+          }
+          h /= 6;
+        }
+
+        // Desaturate by 60% (making it much softer, less saturated)
+        s *= 0.40;
+
+        // Force lightness to a soft pastel range (88% light)
+        l = 0.88;
+
+        // Convert back to HSL CSS string
+        return `hsl(${Math.round(h * 360)}, ${Math.round(s * 100)}%, ${Math.round(l * 100)}%)`;
+      }
+
+      // Dynamic text color accessibility check: darkens light hex colors for excellent readability on white/cream backgrounds
+      function getContrastTextColor(hex) {
+        if (!hex) return 'var(--fg-color)';
+        if (hex.startsWith('var')) return hex;
+
+        // Parse hex to RGB
+        let r = parseInt(hex.slice(1, 3), 16);
+        let g = parseInt(hex.slice(3, 5), 16);
+        let b = parseInt(hex.slice(5, 7), 16);
+
+        // Convert RGB to HSL
+        r /= 255; g /= 255; b /= 255;
+        let max = Math.max(r, g, b), min = Math.min(r, g, b);
+        let h, s, l = (max + min) / 2;
+
+        if (max === min) {
+          h = s = 0; // achromatic
+        } else {
+          let d = max - min;
+          s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+          switch (max) {
+            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+            case g: h = (b - r) / d + 2; break;
+            case b: h = (r - g) / d + 4; break;
+          }
+          h /= 6;
+        }
+
+        // If the color is too light (L > 0.58), darken it to a safe accessible range (L = 36%)
+        // and slightly boost the saturation (S) so it retains its vibrant color identity!
+        if (l > 0.58) {
+          l = 0.36;
+          s = Math.max(s, 0.50);
+        }
+
+        // Convert back to HSL CSS string
+        return `hsl(${Math.round(h * 360)}, ${Math.round(s * 100)}%, ${Math.round(l * 100)}%)`;
+      }
+
+      // Fetch selecoes.json database
+      fetch("data/selecoes.json")
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP erro! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          renderAlbumProgress(data);
+        })
+        .catch(error => {
+          console.error("Erro ao carregar o JSON:", error);
+
+          // Present a gorgeous informative fallback to the developer/user
+          groupsContainer.innerHTML = "";
+          fallbackContainer.innerHTML = `
+            <div class="alert-card">
+              <h2 class="alert-title">Acesso Local Bloqueado (CORS) 🔒</h2>
+              <p class="alert-text">
+                O navegador bloqueou a leitura do arquivo <strong>data/selecoes.json</strong> devido a restrições de segurança de arquivos locais (protocolo <code>file://</code>).
+                <br><br>
+                <strong>Como resolver:</strong> Abra o projeto utilizando um servidor web local (como a extensão <em>Live Server</em> do VS Code, rodando <code>python -m http.server</code> no terminal ou qualquer servidor de sua escolha).
+              </p>
+            </div>
+          `;
+        });
+
+      function renderAlbumProgress(selecoes) {
+        fallbackContainer.innerHTML = "";
+        groupsContainer.innerHTML = "";
+
+        const globalCounterBadge = document.getElementById("global-counter-badge");
+        let globalRemainingCount = 0;
+
+        // Calculate global remaining sum
+        selecoes.forEach(sel => {
+          if (sel.missing) {
+            globalRemainingCount += sel.missing.length;
+          }
+        });
+
+        function updateGlobalCounter() {
+          globalCounterBadge.innerText = `Restam ${globalRemainingCount} ${globalRemainingCount === 1 ? 'figurinha' : 'figurinhas'}`;
+        }
+        updateGlobalCounter();
+
+        // 1. Group selections into FWC, CC, and Regular
+        const fwcSelections = [];
+        const ccSelections = [];
+        const regularSelections = [];
+
+        selecoes.forEach(sel => {
+          const group = sel.group || "FWC";
+          if (group === "FWC") {
+            fwcSelections.push(sel);
+          } else if (group === "CC") {
+            ccSelections.push(sel);
+          } else {
+            regularSelections.push(sel);
+          }
+        });
+
+        // 2. Prepare cards to render
+        const cardsToRender = [];
+
+        if (fwcSelections.length > 0) {
+          cardsToRender.push({
+            letter: "FWC",
+            titleText: "FIFA CUP History",
+            selections: fwcSelections,
+            isSpecialGroup: true
+          });
+        }
+
+        if (regularSelections.length > 0) {
+          regularSelections.forEach(sel => {
+            cardsToRender.push({
+              letter: "regular",
+              titleText: "", // No main card title needed since row header serves as card title
+              selections: [sel],
+              isSpecialGroup: false,
+              singleSelectionColor: sel.color
+            });
+          });
+        }
+
+        if (ccSelections.length > 0) {
+          cardsToRender.push({
+            letter: "CC",
+            titleText: "Coca-Cola",
+            selections: ccSelections,
+            isSpecialGroup: true
+          });
+        }
+
+        // 3. Render cards
+        cardsToRender.forEach(cardData => {
+          const { letter, titleText, selections, isSpecialGroup, singleSelectionColor } = cardData;
+
+          // Create the Group Card element
+          const card = document.createElement("div");
+          card.className = "group-card";
+
+          if (!isSpecialGroup && singleSelectionColor) {
+            // Apply light background variant of the team color to the card itself (with !important to override print stylesheet)
+            card.style.setProperty('background-color', getLightColorVariant(singleSelectionColor), 'important');
+          }
+
+          // Circle badge (Only for FIFA Cup History "FWC")
+          if (letter === "FWC") {
+            const badge = document.createElement("div");
+            badge.className = "group-badge";
+            badge.innerText = "★";
+
+            // Give group badges rotation variation
+            badge.style.transform = "rotate(-3deg)";
+            card.appendChild(badge);
+          }
+
+          // Card title (Only for special groups)
+          if (isSpecialGroup) {
+            const title = document.createElement("h3");
+            title.className = "group-title";
+            title.style.display = "flex";
+            title.style.alignItems = "center";
+            title.style.width = "100%";
+            title.innerText = titleText;
+
+            let specialCountBadge = null;
+            let specialSelectionRemaining = 0;
+
+            const sel = selections[0];
+            if (sel) {
+              // Colorize special card title with selection color from JSON (wrapped in contrast safeguard check)
+              title.style.color = getContrastTextColor(sel.color);
+
+              if (sel.missing) {
+                specialCountBadge = document.createElement("span");
+                specialCountBadge.className = "selection-count-badge";
+                specialSelectionRemaining = sel.missing.length;
+                specialCountBadge.innerText = specialSelectionRemaining;
+
+                // Keep the count badge text color neutral for accessibility
+                specialCountBadge.style.color = "var(--fg-color)";
+                title.appendChild(specialCountBadge);
+              }
+            }
+            card.appendChild(title);
+          }
+
+          // Selection items list inside card
+          const list = document.createElement("div");
+          list.className = "selection-list";
+
+          selections.forEach(sel => {
+            // Skip rendering if selection has no missing stickers
+            if (!sel.missing || sel.missing.length === 0) return;
+
+            const row = document.createElement("div");
+            row.className = "selection-row";
+
+            let countBadge;
+            let selectionRemaining;
+
+            if (isSpecialGroup) {
+              // For special groups, we have one less hierarchy level.
+              // No row header, we directly bind to the card's top count badge.
+              selectionRemaining = sel.missing.length;
+            } else {
+              // Standard selection header (row header with group indicator, dot, name and badge)
+              const header = document.createElement("div");
+              header.className = "selection-header";
+
+              // [ A ] indicator
+              const indicator = document.createElement("span");
+              indicator.className = "group-indicator";
+              indicator.innerText = `${sel.group}`;
+
+              const bullet = document.createElement("span");
+              bullet.className = "indicator-bullet";
+              bullet.innerText = " • ";
+
+              const dot = document.createElement("div");
+              dot.className = "color-dot";
+              dot.style.backgroundColor = sel.color || "var(--accent-color)";
+
+              const name = document.createElement("span");
+              name.className = "selection-name";
+              name.innerText = sel.name;
+              name.style.color = getContrastTextColor(sel.color);
+
+              countBadge = document.createElement("span");
+              countBadge.className = "selection-count-badge";
+              selectionRemaining = sel.missing.length;
+              countBadge.innerText = selectionRemaining;
+
+              header.appendChild(indicator);
+
+              header.appendChild(dot);
+              header.appendChild(name);
+              header.appendChild(countBadge);
+              row.appendChild(header);
+            }
+
+            // Stickers wrapped flow list
+            const stickersWrap = document.createElement("div");
+            stickersWrap.className = "stickers-wrap";
+
+            sel.missing.sort((a, b) => a - b).forEach(num => {
+              const pill = document.createElement("div");
+              pill.className = "sticker-pill";
+
+              // Check if sticker is number 13 to apply landscape 6.5:5 aspect ratio (except for Coca-Cola selection)
+              if (num === 13 && letter !== "CC") {
+                pill.classList.add("landscape");
+              }
+
+              // Check if sticker is number 1 (special shiny), except for FWC (FIFA CUP History) group
+              if (num === 1 && letter !== "FWC") {
+                pill.classList.add("special-shiny");
+              }
+
+              // Pad numbers with leading zeros (e.g. 03, 12)
+              const formattedNum = num.toString().padStart(2, "0");
+
+              // Stack code and number inside portrait cards, align side-by-side inside landscape cards
+              pill.innerHTML = `
+                <span class="sticker-pill-code">${sel.cod}</span>
+                <span class="sticker-pill-num">${formattedNum}</span>
+              `;
+
+              // Style the pill: regular selection cards have white sticker background for clean pop contrast
+              if (isSpecialGroup) {
+                pill.style.backgroundColor = getLightColorVariant(sel.color);
+              } else {
+                pill.style.backgroundColor = "#FFFFFF";
+              }
+              pill.style.borderColor = "var(--border-color)";
+
+              // Quick click visual pop effect
+              pill.addEventListener("click", () => {
+                pill.style.transform = "scale(0.85)";
+                setTimeout(() => {
+                  pill.style.transform = "";
+                  pill.style.backgroundColor = "var(--quaternary-color)";
+                  pill.style.color = "var(--fg-color)";
+                  // Render a beautiful solid checkmark in the pop collected state
+                  pill.innerHTML = '<span style="font-family:\'Outfit\'; font-weight:800; font-size:24px; line-height:1;">✓</span>';
+
+                  setTimeout(() => {
+                    pill.remove();
+
+                    // Reactively decrement counters
+                    if (isSpecialGroup) {
+                      // Handled by top badge directly
+                    } else {
+                      selectionRemaining--;
+                      countBadge.innerText = selectionRemaining;
+                    }
+
+                    globalRemainingCount--;
+                    updateGlobalCounter();
+
+                    // Clean up row if selection has no remaining stickers left visible
+                    if (stickersWrap.children.length === 0) {
+                      row.remove();
+                    }
+                    // Clean up card if list is completely empty
+                    if (list.children.length === 0 || Array.from(list.children).every(c => c.children.length === 0)) {
+                      card.remove();
+                    }
+                  }, 600);
+                }, 150);
+              });
+
+              stickersWrap.appendChild(pill);
+            });
+
+            row.appendChild(stickersWrap);
+            list.appendChild(row);
+          });
+
+          card.appendChild(list);
+          groupsContainer.appendChild(card);
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>
