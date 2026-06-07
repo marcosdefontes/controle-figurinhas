@@ -276,6 +276,32 @@
       font-size: 15px;
     }
 
+    .sticker-pill-large {
+      height: 130px;
+      padding: 10px;
+    }
+
+    .sticker-pill-large .sticker-pill-code {
+      font-size: 22px;
+    }
+
+    .sticker-pill-large .sticker-pill-num {
+      font-size: 36px;
+    }
+
+    .sticker-pill-large.landscape {
+      height: auto;
+      width: 130px;
+    }
+
+    .sticker-pill-large.landscape .sticker-pill-code {
+      font-size: 24px;
+    }
+
+    .sticker-pill-large.landscape .sticker-pill-num {
+      font-size: 32px;
+    }
+
     /* Fallback / Error Alert Cards */
     .alert-card {
       background-color: #FEE2E2;
@@ -682,6 +708,19 @@
       .sticker-pill.special-shiny {
         border: 1.2px dashed var(--accent-color) !important;
         box-shadow: 1px 1px 0px var(--secondary-color), 1.5px 1.5px 0px #1E293B !important;
+      }
+
+      .sticker-pill-large {
+        height: 52px !important;
+        padding: 5px !important;
+      }
+
+      .sticker-pill-large .sticker-pill-code {
+        font-size: 11px !important;
+      }
+
+      .sticker-pill-large .sticker-pill-num {
+        font-size: 20px !important;
       }
 
       .alert-card {
@@ -1267,7 +1306,7 @@
             sel.missing.sort((a,b)=>a-b).forEach(num => {
               hasSpecial = true;
               const pill = document.createElement("div");
-              pill.className = "sticker-pill";
+              pill.className = "sticker-pill sticker-pill-large";
               
               if (num === 13 && sel.cod !== "CC") {
                 pill.classList.add("landscape");
@@ -1288,7 +1327,7 @@
             if (sel.missing.includes(1) && sel.cod !== "CC") {
               hasSpecial = true;
               const pill = document.createElement("div");
-              pill.className = "sticker-pill special-shiny";
+              pill.className = "sticker-pill sticker-pill-large special-shiny";
               
               pill.innerHTML = `
                 <span class="sticker-pill-code">${sel.cod}</span>
