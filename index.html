@@ -345,6 +345,25 @@
       box-shadow: 1px 1px 0px 0px var(--border-color);
     }
 
+    .completed-message {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background-color: var(--quaternary-color);
+      color: var(--fg-color);
+      border: 2px dashed var(--border-color);
+      border-radius: 12px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      text-transform: uppercase;
+      width: 100%;
+      margin-top: 4px;
+      box-shadow: 2px 2px 0px 0px var(--border-color);
+    }
+
     /* ==========================================
        PRINT INSTRUCTION HELPER BANNER (SCREEN ONLY)
        ========================================== */
@@ -828,16 +847,20 @@
               // Colorize special card title with selection color from JSON (wrapped in contrast safeguard check)
               title.style.color = getContrastTextColor(sel.color);
 
-              if (sel.missing) {
-                specialCountBadge = document.createElement("span");
-                specialCountBadge.className = "selection-count-badge";
-                specialSelectionRemaining = sel.missing.length;
+              specialCountBadge = document.createElement("span");
+              specialCountBadge.className = "selection-count-badge";
+              specialSelectionRemaining = selections.reduce((acc, s) => acc + (s.missing ? s.missing.length : 0), 0);
+              
+              if (specialSelectionRemaining === 0) {
+                specialCountBadge.innerHTML = '✓';
+                specialCountBadge.style.backgroundColor = 'var(--quaternary-color)';
+              } else {
                 specialCountBadge.innerText = specialSelectionRemaining;
-
-                // Keep the count badge text color neutral for accessibility
-                specialCountBadge.style.color = "var(--fg-color)";
-                title.appendChild(specialCountBadge);
               }
+
+              // Keep the count badge text color neutral for accessibility
+              specialCountBadge.style.color = "var(--fg-color)";
+              title.appendChild(specialCountBadge);
             }
             card.appendChild(title);
           }
@@ -847,19 +870,17 @@
           list.className = "selection-list";
 
           selections.forEach(sel => {
-            // Skip rendering if selection has no missing stickers
-            if (!sel.missing || sel.missing.length === 0) return;
+            const isCompleted = !sel.missing || sel.missing.length === 0;
 
             const row = document.createElement("div");
             row.className = "selection-row";
 
             let countBadge;
-            let selectionRemaining;
+            let selectionRemaining = isCompleted ? 0 : sel.missing.length;
 
             if (isSpecialGroup) {
               // For special groups, we have one less hierarchy level.
               // No row header, we directly bind to the card's top count badge.
-              selectionRemaining = sel.missing.length;
             } else {
               // Standard selection header (row header with group indicator, dot, name and badge)
               const header = document.createElement("div");
@@ -885,8 +906,12 @@
 
               countBadge = document.createElement("span");
               countBadge.className = "selection-count-badge";
-              selectionRemaining = sel.missing.length;
-              countBadge.innerText = selectionRemaining;
+              if (isCompleted) {
+                countBadge.innerHTML = '✓';
+                countBadge.style.backgroundColor = 'var(--quaternary-color)';
+              } else {
+                countBadge.innerText = selectionRemaining;
+              }
 
               header.appendChild(indicator);
 
@@ -900,14 +925,20 @@
             const stickersWrap = document.createElement("div");
             stickersWrap.className = "stickers-wrap";
 
-            sel.missing.sort((a, b) => a - b).forEach(num => {
-              const pill = document.createElement("div");
-              pill.className = "sticker-pill";
+            if (isCompleted) {
+              const completedMsg = document.createElement("div");
+              completedMsg.className = "completed-message";
+              completedMsg.innerHTML = '<span>✓</span> Completo';
+              stickersWrap.appendChild(completedMsg);
+            } else {
+              sel.missing.sort((a, b) => a - b).forEach(num => {
+                const pill = document.createElement("div");
+                pill.className = "sticker-pill";
 
-              // Check if sticker is number 13 to apply landscape 6.5:5 aspect ratio (except for Coca-Cola selection)
-              if (num === 13 && letter !== "CC") {
-                pill.classList.add("landscape");
-              }
+                // Check if sticker is number 13 to apply landscape 6.5:5 aspect ratio (except for Coca-Cola selection)
+                if (num === 13 && letter !== "CC") {
+                  pill.classList.add("landscape");
+                }
 
               // Check if sticker is number 1 (special shiny), except for FWC (FIFA CUP History) group
               if (num === 1 && letter !== "FWC") {
@@ -946,22 +977,33 @@
 
                     // Reactively decrement counters
                     if (isSpecialGroup) {
-                      // Handled by top badge directly
+                      if (specialCountBadge) {
+                        specialSelectionRemaining--;
+                        if (specialSelectionRemaining === 0) {
+                          specialCountBadge.innerHTML = '✓';
+                          specialCountBadge.style.backgroundColor = 'var(--quaternary-color)';
+                        } else {
+                          specialCountBadge.innerText = specialSelectionRemaining;
+                        }
+                      }
                     } else {
                       selectionRemaining--;
-                      countBadge.innerText = selectionRemaining;
+                      if (selectionRemaining === 0) {
+                        countBadge.innerHTML = '✓';
+                        countBadge.style.backgroundColor = 'var(--quaternary-color)';
+                      } else {
+                        countBadge.innerText = selectionRemaining;
+                      }
                     }
 
                     globalRemainingCount--;
                     updateGlobalCounter();
 
-                    // Clean up row if selection has no remaining stickers left visible
                     if (stickersWrap.children.length === 0) {
-                      row.remove();
-                    }
-                    // Clean up card if list is completely empty
-                    if (list.children.length === 0 || Array.from(list.children).every(c => c.children.length === 0)) {
-                      card.remove();
+                      const completedMsg = document.createElement("div");
+                      completedMsg.className = "completed-message";
+                      completedMsg.innerHTML = '<span>✓</span> Completo';
+                      stickersWrap.appendChild(completedMsg);
                     }
                   }, 600);
                 }, 150);
@@ -969,6 +1011,7 @@
 
               stickersWrap.appendChild(pill);
             });
+            }
 
             row.appendChild(stickersWrap);
             list.appendChild(row);
