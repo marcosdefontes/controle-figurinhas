@@ -414,6 +414,98 @@
     }
 
     /* ==========================================
+       SUMMARY TABLES STYLES
+       ========================================== */
+    .summary-tables-wrapper {
+      margin-top: 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    .summary-section {
+      background-color: var(--card-bg);
+      border: 3px solid var(--border-color);
+      border-radius: 24px;
+      padding: 32px 24px;
+      box-shadow: 8px 8px 0px 0px var(--border-color);
+    }
+
+    .summary-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      border-bottom: 2px dashed #E2E8F0;
+      padding-bottom: 12px;
+      color: var(--fg-color);
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    .styled-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 15px;
+      min-width: 600px;
+    }
+
+    .styled-table th, .styled-table td {
+      border: 2px solid var(--border-color);
+      padding: 14px 16px;
+      text-align: left;
+    }
+
+    .styled-table th {
+      background-color: var(--tertiary-color);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+    }
+
+    .styled-table tr:nth-child(even) {
+      background-color: #F8FAFC;
+    }
+
+    .missing-square {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      background-color: var(--secondary-color);
+      border: 2px solid var(--border-color);
+      border-radius: 4px;
+      box-shadow: 1px 1px 0px var(--border-color);
+    }
+
+    .missing-squares-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .table-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 22px;
+      padding: 0 8px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 12px;
+      color: #FFFFFF;
+      background-color: var(--accent-color);
+      border: 2px solid var(--border-color);
+      border-radius: 6px;
+      box-shadow: 2px 2px 0px 0px var(--border-color);
+    }
+
+    /* ==========================================
        PRINT SETUP FOR A4 PORTRAIT PAGE
        ========================================== */
     @media print {
@@ -599,6 +691,60 @@
       .print-instruction {
         display: none !important;
       }
+
+      .summary-tables-wrapper {
+        page-break-before: always !important;
+        break-before: page !important;
+        margin-top: 0 !important;
+        gap: 16px !important;
+      }
+
+      .summary-section {
+        padding: 12px 16px !important;
+        border: 1.5px solid #1E293B !important;
+        box-shadow: 2px 2px 0px #1E293B !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      .summary-title {
+        font-size: 16px !important;
+        margin-bottom: 12px !important;
+        padding-bottom: 8px !important;
+        border-bottom-width: 1px !important;
+      }
+
+      .styled-table {
+        min-width: 100% !important;
+        font-size: 10px !important;
+      }
+
+      .styled-table th, .styled-table td {
+        padding: 6px 8px !important;
+        border-width: 1px !important;
+      }
+
+      .styled-table th {
+        font-size: 10px !important;
+      }
+
+      .missing-square {
+        width: 10px !important;
+        height: 10px !important;
+        border-width: 1px !important;
+        margin-right: 2px !important;
+        margin-bottom: 2px !important;
+        box-shadow: none !important;
+      }
+
+      .table-badge {
+        height: auto !important;
+        padding: 2px 6px !important;
+        font-size: 10px !important;
+        border-width: 1px !important;
+        border-radius: 4px !important;
+        box-shadow: 1px 1px 0px 0px #1E293B !important;
+      }
     }
   </style>
 </head>
@@ -622,6 +768,9 @@
     <div class="groups-grid" id="groups-container">
       <!-- Injected Dynamically by JavaScript -->
     </div>
+
+    <!-- Summary Tables -->
+    <div id="summary-tables-container"></div>
 
   </div>
 
@@ -940,8 +1089,8 @@
                   pill.classList.add("landscape");
                 }
 
-              // Check if sticker is number 1 (special shiny), except for FWC (FIFA CUP History) group
-              if (num === 1 && letter !== "FWC") {
+              // Check if sticker is number 1 (special shiny), except for FWC (FIFA CUP History) group and Coca-Cola
+              if (num === 1 && letter !== "FWC" && letter !== "CC") {
                 pill.classList.add("special-shiny");
               }
 
@@ -1020,6 +1169,147 @@
           card.appendChild(list);
           groupsContainer.appendChild(card);
         });
+
+        // ==========================================
+        // SUMMARY TABLES RENDERING
+        // ==========================================
+        const summaryContainer = document.getElementById("summary-tables-container");
+        summaryContainer.innerHTML = ""; // reset
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "summary-tables-wrapper";
+
+        // --- Table 1: General Missing Status ---
+        const table1Section = document.createElement("div");
+        table1Section.className = "summary-section";
+        
+        const groupedSels = {};
+        selecoes.forEach(sel => {
+          const groupName = sel.group || "-";
+          if (!groupedSels[groupName]) groupedSels[groupName] = [];
+          groupedSels[groupName].push(sel);
+        });
+
+        const groupsArray = Object.entries(groupedSels);
+        const midPoint = Math.ceil(groupsArray.length / 2);
+        const firstHalf = groupsArray.slice(0, midPoint);
+        const secondHalf = groupsArray.slice(midPoint);
+
+        function buildTableHTML(halfArray) {
+           if (halfArray.length === 0) return '';
+           let html = `
+             <div class="table-responsive" style="flex: 1; min-width: 300px;">
+               <table class="styled-table" style="min-width: 100%;">
+                 <thead>
+                   <tr>
+                     <th>Grupo</th>
+                     <th>Cód</th>
+                     <th>País</th>
+                     <th>Faltantes</th>
+                   </tr>
+                 </thead>
+                 <tbody>
+           `;
+           for (const [groupName, sels] of halfArray) {
+             const rowspan = sels.length;
+             sels.forEach((sel, index) => {
+               const missingCount = sel.missing ? sel.missing.length : 0;
+               let squaresHTML = "";
+               if (missingCount === 0) {
+                 squaresHTML = '<span style="font-weight: 800; color: #10B981;">✓ COMPLETO</span>';
+               } else {
+                 squaresHTML = '<div class="missing-squares-wrap">';
+                 for(let i = 0; i < missingCount; i++) {
+                   squaresHTML += '<div class="missing-square"></div>';
+                 }
+                 squaresHTML += '</div>';
+               }
+               html += `<tr>`;
+               if (index === 0) {
+                 html += `<td rowspan="${rowspan}" style="vertical-align: middle; text-align: center; border-right: 3px solid var(--border-color); width: 60px;"><span class="table-badge" style="font-size: 20px; padding: 12px 16px; height: auto;">${groupName}</span></td>`;
+               }
+               html += `
+                 <td><strong>${sel.cod}</strong></td>
+                 <td>${sel.name}</td>
+                 <td>${squaresHTML}</td>
+               </tr>`;
+             });
+           }
+           html += `</tbody></table></div>`;
+           return html;
+        }
+
+        let table1HTML = `
+          <h2 class="summary-title">Resumo por Seleção</h2>
+          <div style="display: flex; flex-wrap: wrap; gap: 24px;">
+            ${buildTableHTML(firstHalf)}
+            ${buildTableHTML(secondHalf)}
+          </div>
+        `;
+        table1Section.innerHTML = table1HTML;
+        wrapper.appendChild(table1Section);
+
+        // --- Table 2: Special Missing Cards ---
+        const table2Section = document.createElement("div");
+        table2Section.className = "summary-section";
+
+        table2Section.innerHTML = `<h2 class="summary-title">Cartas Especiais Faltantes</h2>`;
+        
+        const specialStickersWrap = document.createElement("div");
+        specialStickersWrap.className = "stickers-wrap";
+        let hasSpecial = false;
+
+        selecoes.forEach(sel => {
+          if (!sel.missing || sel.missing.length === 0) return;
+
+          // FIFA Cup History (group FWC or code FWC)
+          if (sel.group === "FWC" || sel.cod === "FWC") {
+            sel.missing.sort((a,b)=>a-b).forEach(num => {
+              hasSpecial = true;
+              const pill = document.createElement("div");
+              pill.className = "sticker-pill";
+              
+              if (num === 13 && sel.cod !== "CC") {
+                pill.classList.add("landscape");
+              }
+              
+              const formattedNum = num.toString().padStart(2, "0");
+              pill.innerHTML = `
+                <span class="sticker-pill-code">${sel.cod}</span>
+                <span class="sticker-pill-num">${formattedNum}</span>
+              `;
+              pill.style.backgroundColor = getLightColorVariant(sel.color);
+              pill.style.borderColor = "var(--border-color)";
+              
+              specialStickersWrap.appendChild(pill);
+            });
+          } else {
+            // Figurinhas número 1 (exceto Coca-Cola)
+            if (sel.missing.includes(1) && sel.cod !== "CC") {
+              hasSpecial = true;
+              const pill = document.createElement("div");
+              pill.className = "sticker-pill special-shiny";
+              
+              pill.innerHTML = `
+                <span class="sticker-pill-code">${sel.cod}</span>
+                <span class="sticker-pill-num">01</span>
+              `;
+              pill.style.backgroundColor = "#FFFFFF";
+              pill.style.borderColor = "var(--border-color)";
+              
+              specialStickersWrap.appendChild(pill);
+            }
+          }
+        });
+
+        if (!hasSpecial) {
+           specialStickersWrap.innerHTML = `<div style="text-align: center; width: 100%; font-weight: 800; padding: 24px;">Todas as cartas especiais já foram coletadas! ✓</div>`;
+        }
+
+        table2Section.appendChild(specialStickersWrap);
+        wrapper.appendChild(table2Section);
+
+        summaryContainer.appendChild(wrapper);
       }
     });
   </script>

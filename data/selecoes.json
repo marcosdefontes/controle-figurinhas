@@ -8,7 +8,6 @@
       11,
       12,
       16,
-      19,
       20
     ],
     "color": "#A9DFBF",
@@ -89,10 +88,9 @@
     "group": "B"
   },
   {
-    "cod": "BIH",
+    "cod": "SUI",
     "name": "Suíça",
     "missing": [
-      9,
       13,
       17,
       18,
@@ -219,7 +217,6 @@
     "cod": "CUW",
     "name": "Curaçao",
     "missing": [
-      10,
       13,
       17,
       19,
@@ -253,11 +250,9 @@
     "cod": "NED",
     "name": "Holanda",
     "missing": [
-      4,
       5,
       9,
-      17,
-      18
+      17
     ],
     "color": "#F5CBA7",
     "group": "F"
@@ -324,7 +319,7 @@
       11,
       13,
       14,
-      -17,
+      17,
       18
     ],
     "color": "#D98880",
@@ -382,7 +377,6 @@
     "cod": "KSA",
     "name": "Arábia Saudita",
     "missing": [
-      2,
       4,
       8,
       10,
@@ -543,7 +537,6 @@
       1,
       13,
       15,
-      16,
       18
     ],
     "color": "#D6EAF8",
