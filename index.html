@@ -731,6 +731,10 @@
         display: none !important;
       }
 
+      .no-print {
+        display: none !important;
+      }
+
       .summary-tables-wrapper {
         page-break-before: always !important;
         break-before: page !important;
@@ -785,6 +789,46 @@
         box-shadow: 1px 1px 0px 0px #1E293B !important;
       }
     }
+
+    .copy-btn {
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 10px 24px;
+      background-color: var(--accent-color);
+      color: #FFFFFF;
+      border: 2px solid var(--border-color);
+      border-radius: 9999px;
+      box-shadow: 3px 3px 0px 0px var(--border-color);
+      cursor: pointer;
+      transition: transform 0.2s var(--ease-elastic), background-color 0.2s;
+    }
+
+    .copy-btn:hover {
+      transform: scale(1.03) translateY(-2px);
+      background-color: #7C3AED;
+    }
+
+    .toast-notification {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background-color: var(--quaternary-color);
+      color: var(--fg-color);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      padding: 16px 24px;
+      border: 3px solid var(--border-color);
+      border-radius: 12px;
+      box-shadow: 4px 4px 0px 0px var(--border-color);
+      z-index: 9999;
+      transform: translateY(150%);
+      transition: transform 0.4s var(--ease-elastic);
+    }
+    .toast-notification.show {
+      transform: translateY(0);
+    }
   </style>
 </head>
 
@@ -796,7 +840,12 @@
     <header>
       <h1 class="title-banner">Figurinhas Restantes</h1>
       <div class="global-counter" id="global-counter-badge">Carregando totalizador...</div>
+      <button id="copy-data-btn" class="copy-btn no-print" style="display: none;">Copiar Dados</button>
     </header>
+
+    <div id="toast-success" class="toast-notification no-print">
+      Copiado com sucesso! ✓
+    </div>
 
 
 
@@ -820,6 +869,47 @@
     document.addEventListener("DOMContentLoaded", () => {
       const groupsContainer = document.getElementById("groups-container");
       const fallbackContainer = document.getElementById("fallback-container");
+      const copyBtn = document.getElementById("copy-data-btn");
+      const toastSuccess = document.getElementById("toast-success");
+      let allSelecoes = [];
+
+      const emojiMap = {
+        "MEX": "🇲🇽", "RSA": "🇿🇦", "KOR": "🇰🇷", "CZE": "🇨🇿",
+        "CAN": "🇨🇦", "BIH": "🇧🇦", "QAT": "🇶🇦", "SUI": "🇨🇭",
+        "BRA": "🇧🇷", "MAR": "🇲🇦", "HAI": "🇭🇹", "SCO": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+        "USA": "🇺🇸", "PAR": "🇵🇾", "AUS": "🇦🇺", "TUR": "🇹🇷",
+        "GER": "🇩🇪", "CUW": "🇨🇼", "CIV": "🇨🇮", "ECU": "🇪🇨",
+        "NED": "🇳🇱", "JPN": "🇯🇵", "SWE": "🇸🇪", "TUN": "🇹🇳",
+        "BEL": "🇧🇪", "EGY": "🇪🇬", "IRN": "🇮🇷", "NZL": "🇳🇿",
+        "ESP": "🇪🇸", "CPV": "🇨🇻", "KSA": "🇸🇦", "URU": "🇺🇾",
+        "FRA": "🇫🇷", "SEN": "🇸🇳", "IRQ": "🇮🇶", "NOR": "🇳🇴",
+        "ARG": "🇦🇷", "ALG": "🇩🇿", "AUT": "🇦🇹", "JOR": "🇯🇴",
+        "POR": "🇵🇹", "COD": "🇨🇩", "UZB": "🇺🇿", "COL": "🇨🇴",
+        "ENG": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "CRO": "🇭🇷", "GHA": "🇬🇭", "PAN": "🇵🇦",
+        "FWC": "🏆", "CC": "🥤"
+      };
+
+      copyBtn.addEventListener("click", () => {
+        let md = "# Figirunhas restante\n";
+        allSelecoes.forEach(sel => {
+          if (sel.missing && sel.missing.length > 0) {
+            const emoji = emojiMap[sel.cod] || "🏳️";
+            md += `## ${emoji} ${sel.cod} ${sel.name}\n`;
+            sel.missing.slice().sort((a,b)=>a-b).forEach(num => {
+              const formattedNum = num.toString().padStart(2, "0");
+              md += `- ${sel.cod}-${formattedNum}\n`;
+            });
+            md += "\n";
+          }
+        });
+        
+        navigator.clipboard.writeText(md.trim()).then(() => {
+          toastSuccess.classList.add("show");
+          setTimeout(() => {
+            toastSuccess.classList.remove("show");
+          }, 3000);
+        });
+      });
 
       // Professional HSL color desaturation and tinting algorithm
       function getLightColorVariant(hex) {
@@ -907,6 +997,8 @@
           return response.json();
         })
         .then(data => {
+          allSelecoes = data;
+          copyBtn.style.display = "inline-block";
           renderAlbumProgress(data);
         })
         .catch(error => {
@@ -1162,6 +1254,12 @@
 
                   setTimeout(() => {
                     pill.remove();
+
+                    // Remove from missing array to keep data in sync for copying
+                    const idx = sel.missing.indexOf(num);
+                    if (idx > -1) {
+                      sel.missing.splice(idx, 1);
+                    }
 
                     // Reactively decrement counters
                     if (isSpecialGroup) {
