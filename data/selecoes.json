@@ -47,7 +47,6 @@
     "cod": "CAN",
     "name": "Canadá",
     "missing": [
-      1,
       10,
       15
     ],
@@ -93,7 +92,6 @@
     "name": "Brasil",
     "missing": [
       15,
-      16,
       17
     ],
     "color": "#7DCEA0",
@@ -111,7 +109,6 @@
     "name": "Haiti",
     "missing": [
       2,
-      9,
       10,
       13,
       16
@@ -295,7 +292,6 @@
     "missing": [
       11,
       13,
-      18,
       19
     ],
     "color": "#85C1E9",
