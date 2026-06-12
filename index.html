@@ -890,20 +890,20 @@
       };
 
       copyBtn.addEventListener("click", () => {
-        let md = "# Figirunhas restante\n";
+        let lines = [];
         allSelecoes.forEach(sel => {
           if (sel.missing && sel.missing.length > 0) {
             const emoji = emojiMap[sel.cod] || "🏳️";
-            md += `## ${emoji} ${sel.cod} ${sel.name}\n`;
-            sel.missing.slice().sort((a,b)=>a-b).forEach(num => {
+            const missingSorted = sel.missing.slice().sort((a, b) => a - b);
+            const stickersStr = missingSorted.map(num => {
               const formattedNum = num.toString().padStart(2, "0");
-              md += `- ${sel.cod}-${formattedNum}\n`;
-            });
-            md += "\n";
+              return `${sel.cod}-${formattedNum}`;
+            }).join(", ");
+            lines.push(`${emoji} *${sel.cod}* - ${sel.name} - ${stickersStr}`);
           }
         });
         
-        navigator.clipboard.writeText(md.trim()).then(() => {
+        navigator.clipboard.writeText(lines.join("\n").trim()).then(() => {
           toastSuccess.classList.add("show");
           setTimeout(() => {
             toastSuccess.classList.remove("show");
