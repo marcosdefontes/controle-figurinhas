@@ -988,8 +988,8 @@
         return `hsl(${Math.round(h * 360)}, ${Math.round(s * 100)}%, ${Math.round(l * 100)}%)`;
       }
 
-      // Fetch selecoes.json database
-      fetch("data/selecoes.json")
+      // Fetch selecoes database from Node.js backend
+      fetch("/api/selecoes")
         .then(response => {
           if (!response.ok) {
             throw new Error(`HTTP erro! Status: ${response.status}`);
