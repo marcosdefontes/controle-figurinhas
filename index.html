@@ -909,8 +909,10 @@
 
       copyBtn.addEventListener("click", () => {
         let lines = [];
+        let totalMissing = 0;
         allSelecoes.forEach(sel => {
           if (sel.missing && sel.missing.length > 0) {
+            totalMissing += sel.missing.length;
             const emoji = emojiMap[sel.cod] || "🏳️";
             const missingSorted = sel.missing.slice().sort((a, b) => a - b);
             const stickersStr = missingSorted.map(num => {
@@ -921,6 +923,8 @@
           }
         });
         
+        lines.unshift(`Figurinhas restantes: *${totalMissing}*`, "");
+
         navigator.clipboard.writeText(lines.join("\n").trim()).then(() => {
           toastSuccess.classList.add("show");
           setTimeout(() => {
@@ -1493,7 +1497,10 @@
         }
 
         table2Section.appendChild(specialStickersWrap);
-        wrapper.appendChild(table2Section);
+        
+        // Especiais fica na primeira página, logo após os grupos
+        table2Section.style.marginTop = "24px";
+        summaryContainer.appendChild(table2Section);
 
         summaryContainer.appendChild(wrapper);
       }
