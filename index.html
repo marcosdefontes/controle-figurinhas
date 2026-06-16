@@ -101,8 +101,20 @@
        ========================================== */
     .groups-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 32px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .groups-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .groups-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .group-card {
@@ -173,12 +185,23 @@
       width: 100%;
     }
 
-    .color-dot {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      border: 2px solid var(--border-color);
+    .selection-flag-text {
+      font-size: 18px;
+      line-height: 1;
+      filter: drop-shadow(1px 1px 0px rgba(30, 41, 59, 0.2));
+      display: inline-block;
+      width: 22px;
+      text-align: center;
+    }
+
+    .selection-flag-img {
+      width: 21px;
+      height: 15px;
+      object-fit: cover;
+      border-radius: 2px;
       box-shadow: 1px 1px 0px 0px var(--border-color);
+      display: inline-block;
+      margin-right: 2px;
     }
 
     .selection-name {
@@ -371,23 +394,12 @@
       box-shadow: 1px 1px 0px 0px var(--border-color);
     }
 
-    .completed-message {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 12px 16px;
-      background-color: var(--quaternary-color);
-      color: var(--fg-color);
-      border: 2px dashed var(--border-color);
-      border-radius: 12px;
-      font-family: 'Outfit', sans-serif;
-      font-weight: 800;
-      font-size: 14px;
-      text-transform: uppercase;
-      width: 100%;
-      margin-top: 4px;
-      box-shadow: 2px 2px 0px 0px var(--border-color);
+    .selection-row.completed {
+      opacity: 0.5;
+    }
+
+    .selection-row.completed .selection-name {
+      text-decoration: line-through;
     }
 
     /* ==========================================
@@ -645,11 +657,17 @@
         gap: 3px !important;
       }
 
-      .color-dot {
-        width: 8px !important;
-        height: 8px !important;
-        border-width: 1.2px !important;
+      .selection-flag-text {
+        font-size: 12px !important;
+        filter: none !important;
+        width: 14px !important;
+      }
+
+      .selection-flag-img {
+        width: 14px !important;
+        height: 10px !important;
         box-shadow: none !important;
+        border: 1px solid #1E293B !important;
       }
 
       .selection-name {
@@ -1037,54 +1055,32 @@
         }
         updateGlobalCounter();
 
-        // 1. Group selections into FWC, CC, and Regular
-        const fwcSelections = [];
-        const ccSelections = [];
-        const regularSelections = [];
+        // 1. Group selections into Regular Groups (Special ones like FWC and CC are skipped here)
+        const regularGroups = {};
 
         selecoes.forEach(sel => {
           const group = sel.group || "FWC";
-          if (group === "FWC") {
-            fwcSelections.push(sel);
-          } else if (group === "CC") {
-            ccSelections.push(sel);
+          if (group === "FWC" || group === "CC") {
+            // Skip FWC and CC from the main grid
           } else {
-            regularSelections.push(sel);
+            if (!regularGroups[group]) {
+              regularGroups[group] = [];
+            }
+            regularGroups[group].push(sel);
           }
         });
 
         // 2. Prepare cards to render
         const cardsToRender = [];
 
-        if (fwcSelections.length > 0) {
+        Object.keys(regularGroups).sort().forEach(groupLetter => {
           cardsToRender.push({
-            letter: "FWC",
-            titleText: "FIFA CUP History",
-            selections: fwcSelections,
-            isSpecialGroup: true
+            letter: groupLetter,
+            titleText: `Grupo ${groupLetter}`,
+            selections: regularGroups[groupLetter],
+            isSpecialGroup: false
           });
-        }
-
-        if (regularSelections.length > 0) {
-          regularSelections.forEach(sel => {
-            cardsToRender.push({
-              letter: "regular",
-              titleText: "", // No main card title needed since row header serves as card title
-              selections: [sel],
-              isSpecialGroup: false,
-              singleSelectionColor: sel.color
-            });
-          });
-        }
-
-        if (ccSelections.length > 0) {
-          cardsToRender.push({
-            letter: "CC",
-            titleText: "Coca-Cola",
-            selections: ccSelections,
-            isSpecialGroup: true
-          });
-        }
+        });
 
         // 3. Render cards
         cardsToRender.forEach(cardData => {
@@ -1099,8 +1095,8 @@
             card.style.setProperty('background-color', getLightColorVariant(singleSelectionColor), 'important');
           }
 
-          // Circle badge (Only for FIFA Cup History "FWC")
-          if (letter === "FWC") {
+          // Circle badge (Only for Especiais)
+          if (letter === "ESPECIAIS") {
             const badge = document.createElement("div");
             badge.className = "group-badge";
             badge.innerText = "★";
@@ -1110,8 +1106,12 @@
             card.appendChild(badge);
           }
 
-          // Card title (Only for special groups)
-          if (isSpecialGroup) {
+          // Shared variables for group-level badges
+          let groupCountBadge = null;
+          let groupSelectionRemaining = 0;
+
+          // Card title
+          if (titleText) {
             const title = document.createElement("h3");
             title.className = "group-title";
             title.style.display = "flex";
@@ -1119,29 +1119,31 @@
             title.style.width = "100%";
             title.innerText = titleText;
 
-            let specialCountBadge = null;
-            let specialSelectionRemaining = 0;
-
-            const sel = selections[0];
-            if (sel) {
-              // Colorize special card title with selection color from JSON (wrapped in contrast safeguard check)
-              title.style.color = getContrastTextColor(sel.color);
-
-              specialCountBadge = document.createElement("span");
-              specialCountBadge.className = "selection-count-badge";
-              specialSelectionRemaining = selections.reduce((acc, s) => acc + (s.missing ? s.missing.length : 0), 0);
-              
-              if (specialSelectionRemaining === 0) {
-                specialCountBadge.innerHTML = '✓';
-                specialCountBadge.style.backgroundColor = 'var(--quaternary-color)';
-              } else {
-                specialCountBadge.innerText = specialSelectionRemaining;
-              }
-
-              // Keep the count badge text color neutral for accessibility
-              specialCountBadge.style.color = "var(--fg-color)";
-              title.appendChild(specialCountBadge);
+            groupSelectionRemaining = selections.reduce((acc, s) => acc + (s.missing ? s.missing.length : 0), 0);
+            groupCountBadge = document.createElement("span");
+            groupCountBadge.className = "selection-count-badge";
+            
+            if (groupSelectionRemaining === 0) {
+              groupCountBadge.innerHTML = '✅';
+              groupCountBadge.style.backgroundColor = 'transparent';
+              groupCountBadge.style.border = 'none';
+              groupCountBadge.style.boxShadow = 'none';
+              groupCountBadge.style.fontSize = '16px';
+              groupCountBadge.style.padding = '0';
+            } else {
+              groupCountBadge.innerText = groupSelectionRemaining;
             }
+            groupCountBadge.style.color = "var(--fg-color)";
+
+            if (isSpecialGroup) {
+              const sel = selections[0];
+              if (sel) {
+                // Colorize special card title with selection color from JSON (wrapped in contrast safeguard check)
+                title.style.color = getContrastTextColor(sel.color);
+              }
+            }
+            
+            title.appendChild(groupCountBadge);
             card.appendChild(title);
           }
 
@@ -1162,22 +1164,27 @@
               // For special groups, we have one less hierarchy level.
               // No row header, we directly bind to the card's top count badge.
             } else {
-              // Standard selection header (row header with group indicator, dot, name and badge)
+              // Standard selection header (row header with dot, name and badge)
               const header = document.createElement("div");
               header.className = "selection-header";
 
-              // [ A ] indicator
-              const indicator = document.createElement("span");
-              indicator.className = "group-indicator";
-              indicator.innerText = `${sel.group}`;
-
-              const bullet = document.createElement("span");
-              bullet.className = "indicator-bullet";
-              bullet.innerText = " • ";
-
-              const dot = document.createElement("div");
-              dot.className = "color-dot";
-              dot.style.backgroundColor = sel.color || "var(--accent-color)";
+              let flag;
+              if (sel.cod === "FWC" || sel.cod === "CC") {
+                flag = document.createElement("span");
+                flag.className = "selection-flag-text";
+                flag.innerText = emojiMap[sel.cod] || "🏳️";
+              } else {
+                flag = document.createElement("img");
+                flag.className = "selection-flag-img";
+                flag.src = `/public/flags/${sel.cod}.png`;
+                flag.alt = sel.cod;
+                flag.onerror = function() {
+                  const fallbackSpan = document.createElement("span");
+                  fallbackSpan.className = "selection-flag-text";
+                  fallbackSpan.innerText = emojiMap[sel.cod] || "🏳️";
+                  flag.replaceWith(fallbackSpan);
+                };
+              }
 
               const name = document.createElement("span");
               name.className = "selection-name";
@@ -1187,15 +1194,18 @@
               countBadge = document.createElement("span");
               countBadge.className = "selection-count-badge";
               if (isCompleted) {
-                countBadge.innerHTML = '✓';
-                countBadge.style.backgroundColor = 'var(--quaternary-color)';
+                countBadge.innerHTML = '✅';
+                countBadge.style.backgroundColor = 'transparent';
+                countBadge.style.border = 'none';
+                countBadge.style.boxShadow = 'none';
+                countBadge.style.fontSize = '16px';
+                countBadge.style.padding = '0';
+                row.classList.add('completed');
               } else {
                 countBadge.innerText = selectionRemaining;
               }
 
-              header.appendChild(indicator);
-
-              header.appendChild(dot);
+              header.appendChild(flag);
               header.appendChild(name);
               header.appendChild(countBadge);
               row.appendChild(header);
@@ -1205,23 +1215,18 @@
             const stickersWrap = document.createElement("div");
             stickersWrap.className = "stickers-wrap";
 
-            if (isCompleted) {
-              const completedMsg = document.createElement("div");
-              completedMsg.className = "completed-message";
-              completedMsg.innerHTML = '<span>✓</span> Completo';
-              stickersWrap.appendChild(completedMsg);
-            } else {
+            if (!isCompleted) {
               sel.missing.sort((a, b) => a - b).forEach(num => {
                 const pill = document.createElement("div");
                 pill.className = "sticker-pill";
 
                 // Check if sticker is number 13 to apply landscape 6.5:5 aspect ratio (except for Coca-Cola selection)
-                if (num === 13 && letter !== "CC") {
+                if (num === 13 && sel.cod !== "CC") {
                   pill.classList.add("landscape");
                 }
 
               // Check if sticker is number 1 (special shiny), except for FWC (FIFA CUP History) group and Coca-Cola
-              if (num === 1 && letter !== "FWC" && letter !== "CC") {
+              if (num === 1 && sel.cod !== "FWC" && sel.cod !== "CC") {
                 pill.classList.add("special-shiny");
               }
 
@@ -1235,7 +1240,7 @@
               `;
 
               // Style the pill: regular selection cards have white sticker background for clean pop contrast
-              if (isSpecialGroup) {
+              if (isSpecialGroup || letter === "ESPECIAIS") {
                 pill.style.backgroundColor = getLightColorVariant(sel.color);
               } else {
                 pill.style.backgroundColor = "#FFFFFF";
@@ -1262,21 +1267,30 @@
                     }
 
                     // Reactively decrement counters
-                    if (isSpecialGroup) {
-                      if (specialCountBadge) {
-                        specialSelectionRemaining--;
-                        if (specialSelectionRemaining === 0) {
-                          specialCountBadge.innerHTML = '✓';
-                          specialCountBadge.style.backgroundColor = 'var(--quaternary-color)';
-                        } else {
-                          specialCountBadge.innerText = specialSelectionRemaining;
-                        }
+                    if (groupCountBadge) {
+                      groupSelectionRemaining--;
+                      if (groupSelectionRemaining === 0) {
+                        groupCountBadge.innerHTML = '✅';
+                        groupCountBadge.style.backgroundColor = 'transparent';
+                        groupCountBadge.style.border = 'none';
+                        groupCountBadge.style.boxShadow = 'none';
+                        groupCountBadge.style.fontSize = '16px';
+                        groupCountBadge.style.padding = '0';
+                      } else {
+                        groupCountBadge.innerText = groupSelectionRemaining;
                       }
-                    } else {
+                    }
+
+                    if (!isSpecialGroup) {
                       selectionRemaining--;
                       if (selectionRemaining === 0) {
-                        countBadge.innerHTML = '✓';
-                        countBadge.style.backgroundColor = 'var(--quaternary-color)';
+                        countBadge.innerHTML = '✅';
+                        countBadge.style.backgroundColor = 'transparent';
+                        countBadge.style.border = 'none';
+                        countBadge.style.boxShadow = 'none';
+                        countBadge.style.fontSize = '16px';
+                        countBadge.style.padding = '0';
+                        row.classList.add('completed');
                       } else {
                         countBadge.innerText = selectionRemaining;
                       }
@@ -1284,13 +1298,6 @@
 
                     globalRemainingCount--;
                     updateGlobalCounter();
-
-                    if (stickersWrap.children.length === 0) {
-                      const completedMsg = document.createElement("div");
-                      completedMsg.className = "completed-message";
-                      completedMsg.innerHTML = '<span>✓</span> Completo';
-                      stickersWrap.appendChild(completedMsg);
-                    }
                   }, 600);
                 }, 150);
               });
@@ -1399,8 +1406,8 @@
         selecoes.forEach(sel => {
           if (!sel.missing || sel.missing.length === 0) return;
 
-          // FIFA Cup History (group FWC or code FWC)
-          if (sel.group === "FWC" || sel.cod === "FWC") {
+          // FIFA Cup History (FWC) and Coca-Cola (CC)
+          if (sel.group === "FWC" || sel.cod === "FWC" || sel.group === "CC" || sel.cod === "CC") {
             sel.missing.sort((a,b)=>a-b).forEach(num => {
               hasSpecial = true;
               const pill = document.createElement("div");
@@ -1418,6 +1425,27 @@
               pill.style.backgroundColor = getLightColorVariant(sel.color);
               pill.style.borderColor = "var(--border-color)";
               
+              pill.addEventListener("click", () => {
+                pill.style.transform = "scale(0.85)";
+                setTimeout(() => {
+                  pill.style.transform = "";
+                  pill.style.backgroundColor = "var(--quaternary-color)";
+                  pill.style.color = "var(--fg-color)";
+                  pill.innerHTML = '<span style="font-family: Outfit, sans-serif; font-weight: 800; font-size: 36px; line-height: 1;">✓</span>';
+
+                  setTimeout(() => {
+                    pill.remove();
+                    const idx = sel.missing.indexOf(num);
+                    if (idx > -1) sel.missing.splice(idx, 1);
+                    globalRemainingCount--;
+                    updateGlobalCounter();
+                    if (specialStickersWrap.children.length === 0) {
+                      specialStickersWrap.innerHTML = `<div style="text-align: center; width: 100%; font-weight: 800; padding: 24px;">Todas as cartas especiais já foram coletadas! ✓</div>`;
+                    }
+                  }, 600);
+                }, 150);
+              });
+              
               specialStickersWrap.appendChild(pill);
             });
           } else {
@@ -1433,6 +1461,27 @@
               `;
               pill.style.backgroundColor = "#FFFFFF";
               pill.style.borderColor = "var(--border-color)";
+              
+              pill.addEventListener("click", () => {
+                pill.style.transform = "scale(0.85)";
+                setTimeout(() => {
+                  pill.style.transform = "";
+                  pill.style.backgroundColor = "var(--quaternary-color)";
+                  pill.style.color = "var(--fg-color)";
+                  pill.innerHTML = '<span style="font-family: Outfit, sans-serif; font-weight: 800; font-size: 36px; line-height: 1;">✓</span>';
+
+                  setTimeout(() => {
+                    pill.remove();
+                    const idx = sel.missing.indexOf(1);
+                    if (idx > -1) sel.missing.splice(idx, 1);
+                    globalRemainingCount--;
+                    updateGlobalCounter();
+                    if (specialStickersWrap.children.length === 0) {
+                      specialStickersWrap.innerHTML = `<div style="text-align: center; width: 100%; font-weight: 800; padding: 24px;">Todas as cartas especiais já foram coletadas! ✓</div>`;
+                    }
+                  }, 600);
+                }, 150);
+              });
               
               specialStickersWrap.appendChild(pill);
             }
